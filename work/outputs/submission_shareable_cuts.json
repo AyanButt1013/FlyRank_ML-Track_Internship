@@ -1,0 +1,6 @@
+{
+    "demo_outline_status": "Ready for Week 8 Showcase (5-minute timing mapped)",
+    "technical_social_post": "Drafted with PR-AUC leakage drop metrics and deployed paper URL",
+    "employer_summary_3_sentences": "Built decay prediction pipeline on 148k+ URLs, quantified -0.0967 leakage drop under GroupKFold, deployed actionable playbook.",
+    "deployed_paper_url": "https://AyanButt1013.github.io/FlyRank_ML-Track_Internship/"
+}
