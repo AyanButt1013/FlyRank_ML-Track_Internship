@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Predicting Content Decay & Ranking Signals in Enterprise Search Portfolios</title>
+<style>
+  @page {
+    size: letter;
+    margin: 0.75in 0.625in 1in 0.625in;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Times New Roman", Times, "Nimbus Roman No9 L", serif;
+    color: #000;
+    background: #e9e9e9;
+    margin: 0;
+    padding: 0;
+    font-size: 10pt;
+    line-height: 1.15;
+  }
+
+  .page {
+    max-width: 8.5in;
+    margin: 24px auto;
+    background: #fff;
+    padding: 0.75in 0.625in 1in 0.625in;
+    box-shadow: 0 0 12px rgba(0,0,0,0.25);
+  }
+
+  /* ---------- Title block (full width) ---------- */
+  .title-block {
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+  h1.paper-title {
+    font-size: 18pt;
+    font-weight: bold;
+    line-height: 1.25;
+    margin: 0 0 12px 0;
+  }
+
+  .author-line {
+    font-size: 12pt;
+    margin: 2px 0;
+  }
+
+  .track-line {
+    font-size: 10.5pt;
+    font-style: italic;
+    margin: 2px 0;
+  }
+
+  .dataset-line {
+    font-size: 10.5pt;
+    margin: 2px 0 16px 0;
+  }
+
+  .abstract-block {
+    text-align: left;
+    max-width: 92%;
+    margin: 0 auto;
+    font-size: 9.5pt;
+  }
+
+  .abstract-block p {
+    margin: 0 0 8px 0;
+    text-align: justify;
+  }
+
+  .abstract-block .label {
+    font-style: italic;
+    font-weight: bold;
+  }
+
+  /* ---------- Two-column body ---------- */
+  .columns {
+    column-count: 2;
+    column-gap: 0.28in;
+    column-rule: none;
+    text-align: justify;
+    font-size: 10pt;
+  }
+
+  h2.section-title {
+    font-size: 11pt;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 16px 0 8px 0;
+    break-after: avoid;
+    break-inside: avoid;
+  }
+
+  h3.subsection-title {
+    font-size: 10pt;
+    font-weight: bold;
+    font-style: italic;
+    margin: 10px 0 4px 0;
+    break-after: avoid;
+  }
+
+  .columns p {
+    margin: 0 0 8px 0;
+    text-indent: 1em;
+  }
+
+  .columns ul, .columns ol {
+    margin: 0 0 8px 0;
+    padding-left: 1.3em;
+    text-indent: 0;
+  }
+
+  .columns li {
+    margin-bottom: 4px;
+  }
+
+  .no-go-list li { margin-bottom: 6px; }
+
+  code, .mono {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 9pt;
+  }
+
+  .equation {
+    text-align: center;
+    margin: 8px 0;
+    break-inside: avoid;
+  }
+
+  .eq-num {
+    float: right;
+    font-style: normal;
+  }
+
+  em.math {
+    font-style: italic;
+  }
+
+  /* ---------- Tables (float within column) ---------- */
+  .table-wrap {
+    break-inside: avoid;
+    margin: 8px 0 12px 0;
+    width: 100%;
+  }
+
+  .table-caption {
+    font-size: 8.5pt;
+    font-weight: bold;
+    margin-bottom: 4px;
+    text-align: left;
+    text-indent: 0;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 8.5pt;
+  }
+
+  table.results-table th,
+  table.results-table td {
+    border: none;
+    padding: 3px 4px;
+    text-align: left;
+  }
+
+  table.results-table thead tr {
+    border-top: 1.2px solid #000;
+    border-bottom: 0.8px solid #000;
+  }
+
+  table.results-table tbody tr:last-child {
+    border-bottom: 1.2px solid #000;
+  }
+
+  .refs {
+    font-size: 9pt;
+  }
+
+  .refs p {
+    text-indent: -1.3em;
+    padding-left: 1.3em;
+    margin: 0 0 6px 0;
+  }
+
+  footer.page-footer {
+    text-align: center;
+    font-size: 9pt;
+    margin-top: 20px;
+    color: #444;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="title-block">
+    <h1 class="paper-title">Predicting Content Decay &amp; Ranking Signals in Enterprise Search Portfolios</h1>
+    <div class="author-line">Research Staff / ML Engineering Intern</div>
+    <div class="track-line">Ranking Signal Analysis &amp; Actionable Content Playbooks</div>
+    <div class="dataset-line">FlyRank Enterprise Warehouse (79M+ Impression Events)</div>
+
+    <div class="abstract-block">
+      <p><span class="label">Abstract—</span>Organic search visibility for enterprise content portfolios decays non-linearly over time, yet traditional search engine optimization relies on static age-based heuristics to schedule content updates. This study investigates whether tree-based machine learning models can accurately identify organic impression decay across enterprise search domains prior to traffic loss. We constructed a 75/25 temporal split over 148,000 active content URLs to train a Random Forest classifier evaluated via GroupKFold cross-validation by client domain. When evaluated on unseen client domains, the model achieved a 0.5032 PR-AUC and 0.5383 ROC-AUC, demonstrating a measured &minus;0.0967 performance drop compared to naive un-grouped splits due to client-level domain authority leakage. Based on these findings, we deployed an actionable decision-support playbook mapping model probabilities to reason codes, producing a triage queue of 120,727 content items while establishing strict human-review guardrails against unverified automated edits.</p>
+      <p><span class="label">Index Terms—</span>content decay, search engine optimization, Random Forest, GroupKFold, data leakage, ranking signals, editorial playbook</p>
+    </div>
+  </div>
+
+  <div class="columns">
+
+    <h2 class="section-title">I. Introduction &amp; Problem Statement</h2>
+    <p>Enterprise digital publishing platforms maintain thousands of historical assets spanning established evergreen articles, competitive product landing pages, and long-tail informational guides. Over time, search engine algorithms, shifting user intent, and competitor activity induce non-linear traffic decay.</p>
+    <p>Conventional content operational playbooks rely heavily on rule-based heuristics&mdash;such as flagging any article older than 180 days for a mandatory rewrite. However, linear rules fail to capture non-linear feature interactions, such as high-impression evergreen pages maintaining top SERP rankings despite high content age, or low-word-count pages suffering rapid click drops due to SERP feature compression. This paper formulates content decay prediction as a binary classification problem and evaluates machine learning performance under strict domain-grouped validation.</p>
+
+    <h2 class="section-title">II. Data Framing &amp; Scope</h2>
+    <p>The dataset originates from the <strong>FlyRank Enterprise Warehouse</strong> dataset, capturing daily Google Search Console (GSC) performance logs and content metadata across 57 distinct client domains.</p>
+    <ul>
+      <li><strong>Total Records Analyzed:</strong> 148,133 active content items (&ge; 10 impressions).</li>
+      <li><strong>Feature Observation Window:</strong> Historical 90-day aggregated window (<em class="math">t</em><sub>0</sub> &rarr; <em class="math">t</em><sub>1</sub>).</li>
+      <li><strong>Forward Target Window:</strong> Subsequent 30-day window (<em class="math">t</em><sub>1</sub> &rarr; <em class="math">t</em><sub>2</sub>).</li>
+      <li><strong>Data Safety &amp; Exclusions:</strong> All internal product decision flags (such as <code>health_score</code> or <code>priority_score</code>) were strictly excluded from model feature vectors to ensure zero target leakage. All client hashes and URL paths remain anonymized.</li>
+    </ul>
+
+    <h2 class="section-title">III. Methodology &amp; Experimental Design</h2>
+    <p>We define the binary target variable as shown in Eq. (1), where &Delta;<sub>fwd30</sub> is the percentage change in annualized forward 30-day impression volume relative to the historical baseline rate.</p>
+    <div class="equation">
+      is_declining_label = 1 if &Delta;<sub>fwd30</sub> &le; &minus;20%, else 0
+      <span class="eq-num">(1)</span>
+    </div>
+
+    <h3 class="subsection-title">A. Model Feature Vector (X)</h3>
+    <p>The feature space consists of six observable historical signals:</p>
+    <ol>
+      <li><code>days_since_update</code>: Content age in days relative to dataset snapshot.</li>
+      <li><code>word_count_clean</code>: Imputed page word count.</li>
+      <li><code>impressions_90d</code>: Total GSC search impressions.</li>
+      <li><code>clicks_90d</code>: Total GSC organic clicks.</li>
+      <li><code>avg_position</code>: Average SERP ranking position.</li>
+      <li><code>ctr</code>: Historical click-through rate,
+        <div class="equation">ctr = clicks / impressions <span class="eq-num">(2)</span></div>
+      </li>
+    </ol>
+
+    <h3 class="subsection-title">B. Validation Split Strategy</h3>
+    <p>To prevent client-level domain authority and industry niche traits from leaking across validation folds, we employed a <strong>5-fold GroupKFold cross-validation grouped by <code>client_hash_id</code></strong>. This guarantees that test performance is evaluated exclusively on unseen client domains.</p>
+
+    <h2 class="section-title">IV. Results &amp; Validation Audit</h2>
+    <p>We evaluated a Random Forest classifier (100 trees, <code>max_depth=5</code>) against both the Week-4 linear baseline rule and an un-grouped (naive) random split to quantify the exact impact of data leakage.</p>
+
+    <div class="table-wrap">
+      <div class="table-caption">TABLE I<br>Validation Performance and Leakage Audit</div>
+      <table class="results-table">
+        <thead>
+          <tr><th>Validation Method</th><th>PR-AUC</th><th>ROC-AUC</th><th>Leakage &Delta;</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Random K-fold (naive)</td><td>0.5999</td><td>0.6301</td><td>&mdash;</td></tr>
+          <tr><td>GroupKFold by client</td><td>0.5032</td><td>0.5383</td><td>&minus;0.0967 / &minus;0.0918</td></tr>
+          <tr><td>Week-4 baseline heuristic</td><td>0.4812</td><td>0.5110</td><td>+0.0220 lift</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subsection-title">A. Error Analysis Highlights</h3>
+    <p><strong>False positives</strong> (predicted decline, actual stable) occur primarily on high-authority evergreen domain pages where high content age (&ge; 180 days) triggers risk flags despite ranking stability.</p>
+    <p><strong>False negatives</strong> (predicted stable, actual decline) occur when high historical 90-day impression volume masks a recent subtle ranking shift from position 3.2 to position 8.5.</p>
+
+    <h2 class="section-title">V. Content Action Playbook &amp; Recommendations</h2>
+    <p>Model probabilities were translated into explicit operational action categories to populate a human-reviewed content queue, summarized in Table II.</p>
+
+    <div class="table-wrap">
+      <div class="table-caption">TABLE II<br>Action Category Mapping (148,133 items evaluated)</div>
+      <table class="results-table">
+        <thead>
+          <tr><th>Category</th><th>Items</th><th>Trigger Condition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>SNIPPET_OPTIMIZATION</code></td><td>32,698</td><td>Striking distance (pos. 1&ndash;20), CTR &lt; 0.5%</td></tr>
+          <tr><td><code>CONTENT_REFRESH</code></td><td>283</td><td>Risk score &ge; 0.50 &amp; age &ge; 180 days</td></tr>
+          <tr><td><code>EXPAND_DEPTH</code></td><td>3,640</td><td>Demand &ge; 250 impr., depth &lt; 1,000 words</td></tr>
+          <tr><td><code>MONITOR</code></td><td>84,106</td><td>Low volume (&lt; 250 impressions)</td></tr>
+          <tr><td><code>NO_ACTION</code></td><td>27,406</td><td>Healthy, performing assets</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Across all five categories, the model produced an actionable triage queue of 120,727 content items requiring some form of editorial attention, with the remainder routed to passive monitoring or marked healthy.</p>
+
+    <h3 class="subsection-title">A. Human Review Guardrails &amp; the &ldquo;No-Go&rdquo; List</h3>
+    <p>The following actions are strictly prohibited from automated execution:</p>
+    <ol class="no-go-list">
+      <li><strong>Automated content rewriting / deletion:</strong> LLM agents must never automatically overwrite or delete live URLs without editorial verification.</li>
+      <li><strong>Core revenue assets:</strong> Pages generating &gt; 10% of client sales conversions require senior editorial sign-off.</li>
+      <li><strong>Canonical URL modifications:</strong> Slug alterations that alter established canonical links.</li>
+    </ol>
+
+    <h2 class="section-title">VI. Reproducibility &amp; Artifacts</h2>
+    <p>All code, data transformation pipelines, and validation audits are open-sourced in the project repository:</p>
+    <ul>
+      <li><code>work/notebooks/w04_baseline_score.ipynb</code> &mdash; Baseline rule specification</li>
+      <li><code>work/notebooks/w05_model.ipynb</code> &mdash; Model training &amp; feature importance</li>
+      <li><code>work/notebooks/w06_validation_audit.ipynb</code> &mdash; GroupKFold leakage audit</li>
+      <li><code>work/notebooks/w07_action_playbook.ipynb</code> &mdash; Playbook generation &amp; export</li>
+      <li><code>work/outputs/w06_metrics.json</code> &mdash; Committed metric receipts</li>
+    </ul>
+
+    <h2 class="section-title">VII. Limitations &amp; Honest Framing</h2>
+    <p>This study is observational; correlations between content freshness, word count, and impression performance do not imply direct causation. Model predictions serve as a directional decision-support triage tool for editorial teams, rather than a deterministic ranking guarantee.</p>
+
+    <h2 class="section-title">References</h2>
+    <div class="refs">
+      <p>[1] FlyRank, &ldquo;FlyRank ML Internship Dataset,&rdquo; 2026. [Online]. Available: <a href="https://flyrank.ai" target="_blank" rel="noopener">https://flyrank.ai</a></p>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
