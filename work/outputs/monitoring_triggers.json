@@ -1,0 +1,14 @@
+{
+    "model_name": "FlyRank Content Decay Risk Classifier",
+    "retrain_triggers": {
+        "pr_auc_floor": 0.45,
+        "false_positive_rejection_ceiling": 0.25,
+        "distribution_shift_threshold": 0.15,
+        "rebase_window_days_post_algo_update": 14
+    },
+    "queue_metrics": {
+        "total_analyzed": 148133,
+        "total_actionable": 120727,
+        "total_senior_review_required": 0
+    }
+}
